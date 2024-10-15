@@ -1,0 +1,57 @@
+# Node.js with React
+# Build a Node.js project that uses React.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
+
+variables:
+  isProduction: $[eq(variables['Build.SourceBranch'], 'refs/heads/master')]
+  isDevelop: $[eq(variables['Build.SourceBranch'], 'refs/heads/develop')]
+
+trigger:
+  branches:
+    include:
+    - '*'
+
+pool:
+  name: default
+  vmImage: windows-latest
+
+steps:
+- task: NodeTool@0
+  inputs:
+    versionSpec: '14.x'
+  displayName: 'Install Node.js'
+
+- script: |
+    npm install --legacy-peer-deps
+    npm config set package-lock true
+  displayName: 'npm install'
+
+- task: EnvTransform@0
+  condition: and(succeeded(), eq(variables.isProduction, 'true'))
+  inputs:
+    inputType: 'inline'
+    content: 'REACT_APP_API_HOST=https://api.minforening.dk/api'
+
+- task: EnvTransform@0
+  condition: and(succeeded(), eq(variables.isDevelop, 'true'))
+  inputs:
+    inputType: 'inline'
+    content: 'REACT_APP_API_HOST=https://api-dev.minforening.dk/api'
+
+- script: |
+    npm run build
+  displayName: 'npm run build'
+
+- task: CopyFiles@2
+  inputs:
+    sourceFolder: '$(Build.SourcesDirectory)/build'
+    contents: '**' 
+    targetFolder: $(Build.ArtifactStagingDirectory)
+  displayName: 'Copy files'
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'

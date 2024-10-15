@@ -1,0 +1,2 @@
+E:\projects\minforening\minforening-webbuild\MinForening%20Web\obj\Debug\MinForening.Web.esproj.SuggestedBindingRedirects.cache
+E:\projects\minforening\minforening-webbuild\MinForening%20Web\obj\Debug\MinForening.Web.esproj.CoreCompileInputs.cache
