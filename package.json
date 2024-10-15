@@ -10,7 +10,6 @@
     "@rebass/grid": "6.1.0",
     "@rebass/preset": "^4.0.5",
     "@sentry/react": "^8.34.0",
-    "camel-case": "^5.0.0",
     "copy-to-clipboard": "^3.3.3",
     "core-js": "^3.38.1",
     "date-fns": "^1.29.0",
